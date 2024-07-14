@@ -8,7 +8,7 @@
         <div class="flex flex-col gap-4 p-4">
           <div class="flex-[2] bg-muted rounded-md p-4">
             <div class="flex gap-4">
-              <img href="https://7tv.app/emotes/60bfb67aa2610d253072f14a">
+              <img src="https://cdn.7tv.app/emote/60bfb67aa2610d253072f14a/4x.webp">
               <div>
                 <h2 class="text-2xl font-bold mb-2">Twitch Bot</h2>
                 <p class="text-muted-foreground">Этот бот предназначен для работы с чатом Twitch.</p>
