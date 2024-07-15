@@ -3,8 +3,12 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "./app/**/*.{js,ts,jsx,tsx}",
+    './components/**/*.{vue,js}',
+    './layouts/**/*.{vue,js}',
+    './pages/**/*.{vue,js}',
+    './plugins/**/*.{js,ts}',
+    './nuxt.config.{js,ts}',
+    './app/**/*.{js,ts}',
   ],
   theme: {
     extend: {
