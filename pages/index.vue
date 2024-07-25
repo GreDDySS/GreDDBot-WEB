@@ -14,24 +14,25 @@ export default {
                     <img src="https://cdn.7tv.app/emote/60bfb67aa2610d253072f14a/4x.webp" height="160px" width="160px">
                     <div>
                         <h2 class="text-2xl font-bold">Twitch Bot</h2>
-                        <p class="text-muted-foreground">
-                            Этот бот предназначен для работы с чатом Twitch.
-                        </p>
-                        <p class="text-muted-foreground">
-                        Он позволяет автоматизировать различные задачи, выполнение команд чата.
-                        </p>
-                        <p class="text-muted-foreground">
-                        Бот также ведёт логирование сообщений и тесно интегрирован с базой данных.
-                        </p>
+                        <ul class="text-muted-foreground list-disc">
+                            <li>Этот бот предназначен для работы с чатом Twitch.</li>
+                            <li>Он позволяет автоматизировать различные задачи, выполнение команд чата.</li>
+                            <li>Бот также ведёт логирование сообщений и тесно интегрирован с базой данных.</li>
+                        </ul>
                     </div>
                 </div>
                 <div class="flex flex-row gap-4">
-                <a to="/commands" class="bg-popover rounded-md p-4 flex-1 flex items-center justify-center hover:bg-accent hover:text-accent-foreground">Commands</a>
-                <a to="/logs" class="bg-popover rounded-md p-4 flex-1 flex items-center justify-center hover:bg-accent hover:text-accent-foreground">Logs</a>
-            </div>
+                    <a href="/commands" class="bg-popover rounded-md p-4 gap-4 flex-1 flex items-center justify-center hover:bg-accent hover:text-accent-foreground">
+                        <Icon name="grommet-icons:command" size="24"/>
+                        Commands
+                    </a>
+                    <a href="/logs" class="bg-popover rounded-md p-4 gap-4 flex-1 flex items-center justify-center hover:bg-accent hover:text-accent-foreground">
+                        <Icon name="simple-line-icons:pencil" size="24"/>
+                        Logs
+                    </a>
+                </div>
             </div>
         </div>
     </div>
   </div>
-
 </template>
