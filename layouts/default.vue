@@ -1,13 +1,14 @@
-<script lang="ts">
-    import Header from "~/components/Header.vue"
-    export default {
-        components: Header
-    }
+<script setup>
+import Header from '~/components/common/Header.vue'
+import Footer from '~/components/common/Footer.vue'
 </script>
 
 <template>
-    <div>
-        <Header />
-        <Nuxt />
-    </div>
+  <div class="flex flex-col min-h-screen bg-background text-foreground">
+    <Header />
+    <main class="flex-1">
+      <NuxtPage />
+    </main>
+    <Footer />
+  </div>
 </template>
