@@ -1,86 +1,91 @@
 <script setup lang="ts">
-  import { ScrollArea } from '~/components/ui/scroll-area'
-  import {ref, onMounted} from 'vue'
+import { ref, onMounted, computed } from "vue";
+import { Pagination } from "../components/ui/pagination";
+import { ScrollArea } from "../components/ui/scroll-area";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from "../components/ui/select";
 
-  interface Channel {
-    id: number
-    name: string
-  }
+const channels = ref<{ channelId: number; channelName: string; }[]>([]);
+const selectedChannelId = ref<string>("");
+const logs = ref<{ id: number; username: string; message: string; badges: string; color: string; timestamp: string; }[]>([]);
+const logsPerPage = ref(100);
+const currentPage = ref(1);
+const totalLogs = ref(0);
 
-  interface Log {
-    id: number
-    username: string
-    color: string
-    message: string
-    date: string
-  }
+const fetchChannels = async () => {
+  const response = await fetch("/api/channels");
+  const data = await response.json();
+  channels.value = data.channels;
+};
 
-  const channels = ref<Channel[]>([])
-  const logs = ref<Log[]>([])
+const fetchLogs = async () => {
+  if (!selectedChannelId.value) return;
 
-  const fetchChannels = async () => {
-    channels.value = await $fetch('/api/getChannel')
-  }
-  
-  const fetchMessages = async (channelId: number) => {
-    logs.value = await $fetch(`/api/getMessage`, {
-      params: {id: channelId}
-    });
-  };
+  const response = await fetch(
+    `/api/logs?channelId=${selectedChannelId.value}&page=${currentPage.value}&limit=${logsPerPage.value}`
+  );
+  const data = await response.json();
+  logs.value = data.logs;
+  totalLogs.value = data.logs.length;
+}
 
-  onMounted(() => {
-    fetchChannels()
-  })
+const totalPages = computed(() => Math.ceil(totalLogs.value / logsPerPage.value));
+
+const handleChannelSelect = (value: string) => {
+  selectedChannelId.value = value;
+  currentPage.value = 1;
+  fetchLogs();
+};
+
+onMounted(() => {
+  fetchChannels();
+});
 </script>
 
 <template>
-    <div class="flex-col m-16">
-      <div class=" h-[500px] grid grid-cols-4 gap-5">
-        <!-- Block Channels -->
-        <div class="bg-card p-5 rounded-lg">
-          <h4 class="text-3xl text-center mb-2">Channels</h4>
-          <ScrollArea class="h-[500px]  w-full rounded-md ">
-            <div class="p-1">
-              <div v-for="channel in channels" :key="channel.id">
-                <button 
-                class="text-md font-semibold w-full rounded-sm bg-popover p-2 m-1.5"
-                @click="fetchMessages(channel.id)"
-                >
-                  {{ channel.name }}
-                </button>
-              </div>
-            </div>
-          </ScrollArea>
-        </div>
-        <!-- Block Log message -->
-        <div class="col-span-3 bg-card p-5 rounded-lg">
-          <h4 class="text-3xl text-center mb-2">Logs</h4>
-          <div v-if="logs.length === 0" class="h-full flex items-center justify-center leading-8 text-neutral-600 text-center">
+  <div class="container mx-auto py-8">
+    <h1 class="text-4xl font-bold mb-8 text-center">Логи сообщений</h1>
 
-            <ul class=" bg-neutral-900 p-4 rounded-lg">
-              <li>
-                <div>
-                  <Icon name="majesticons:chat-2-line" size="48px"/>
-                </div>
-              </li>
-              <li>Выберите канал, чтобы увидеть сообщения.</li>
-              <li>Если нет сообщений, выберите другой канал.</li>
-              
-            </ul>
-          </div>
-          <div v-else>
-            <ScrollArea class="h-[450px] w-full rounded-md border">
-              <div class="p-1">
-                <div v-for="log in logs" :key="log.id">
-                  <p>
-                    <span class="text-neutral-600">{{ log.date }}</span> <span class=" font-semibold" :style="{color: log.color}">{{ log.username }}:</span>
-                    {{ log.message }}
-                  </p>
-                </div>
-              </div>
-            </ScrollArea>
-          </div>
-        </div>
-      </div>
+    <!-- Список каналов -->
+    <div class="flex justify-center mb-8">
+      <Select v-model="selectedChannelId" @update:modelValue="handleChannelSelect">
+        <SelectTrigger class="w-[180px]">
+          <SelectValue placeholder="Выбери канал" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Каналы</SelectLabel>
+            <SelectItem
+              v-for="channel in channels"
+              :key="channel.channelId"
+              :value="String(channel.channelId)"
+            >
+              {{ channel.channelName }}
+            </SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     </div>
+
+    <!-- Логи -->
+    <div class="bg-card p-4 rounded-lg">
+      <ScrollArea class="h-[450px] w-full rounded-md border">
+        <div v-for="log in logs" :key="log.id">
+          <p>
+            <span class="text-neutral-600">{{ log.timestamp }}</span> <span class="font-semibold" :style="{ color: log.color }">{{ log.username }}:</span>
+            {{ log.message }}
+          </p>
+        </div>
+      </ScrollArea>
+    </div>
+
+    <!-- Пагинация -->
+    <div class="mt-4 flex justify-center">
+      <Pagination
+        :total-pages="totalPages"
+        :current-page="currentPage"
+        :sibling-count="1"
+        @page-changed="fetchLogs"
+      />
+    </div>
+  </div>
 </template>
