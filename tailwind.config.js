@@ -5,6 +5,14 @@ module.exports = {
   darkMode: ["class"],
   safelist: ["dark"],
   prefix: "",
+  content: [
+    "./pages/**/*.{vue,js,ts}",
+    "./components/**/*.{vue,js,ts}",
+    "./layouts/**/*.{vue,js,ts}",
+    "./plugins/**/*.{js,ts}",
+    "./nuxt.config.{js,ts}",
+  ],
+
   
   theme: {
     container: {
@@ -51,7 +59,7 @@ module.exports = {
         },
       },
       borderRadius: {
-      	xl: "calc(var(--radius) + 4px)",
+        xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
