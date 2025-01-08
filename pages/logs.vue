@@ -11,6 +11,7 @@ import { Input } from "../components/ui/input";
 import { Calendar } from "../components/ui/calendar"; 
 import type { Channel, Log } from "../server/types/types";
 
+
 const channels = ref<Channel[]>([]);
 const selectedChannelId = ref<string>("");
 const logs = ref<Log[]>([]);
@@ -19,7 +20,7 @@ const currentPage = ref(1);
 const totalLogs = ref(0);
 const searchQuery = ref("");
 const selectedUsername = ref("");
-const selectedDate = ref<Date | undefined>();
+const selectedDate = ref<Date | any>();
 const isLoading = ref(false);
 const error = ref<string | null>(null);
 const debouncedSearch = useDebounce(searchQuery, 300);
@@ -165,7 +166,7 @@ onMounted(() => {
           </Button>
         </PopoverTrigger>
         <PopoverContent align="start" class="w-auto p-0">
-          <Calendar :v-model="selectedDate" />
+          <Calendar v-model="selectedDate" />
         </PopoverContent>
       </Popover>
 
