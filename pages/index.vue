@@ -9,13 +9,13 @@
       Управляйте вашим Twitch-ботом с помощью удобного интерфейса.
     </p>
     <div class="flex justify-center space-x-4">
-      <Button variant="outline">
+      <Button variant="outline" as-child>
         <a href="/commands" class="btn btn-primary">Команды</a>
       </Button>
-      <Button variant="outline">
+      <Button variant="outline" as-child>
         <a href="/logs" class="btn btn-primary">Логи</a>
       </Button>
-      <Button variant="outline" disabled>
+      <Button variant="outline" as-child disabled>
         <a href="/" class="btn btn-secondary">Личный кабинет</a>
       </Button>
     </div>
