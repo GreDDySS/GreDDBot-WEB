@@ -11,7 +11,7 @@ export const getChannels = async () => {
     const result = await pool.query(query);
     return result.rows;
   } catch (err) {
-    console.error('Error get channels: ', (err as Error).message);
+    console.error(err)
     return [];
   }
 }
