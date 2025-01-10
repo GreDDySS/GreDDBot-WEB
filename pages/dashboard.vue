@@ -25,8 +25,6 @@ const loadUserData = async () => {
       return
     }
 
-    console.log('User data loaded:', userData)
-
     stats.value = {
       broadcasterType: userData.broadcaster_type || 'none'
     }
@@ -40,11 +38,8 @@ const loadUserData = async () => {
 
 onMounted(async () => {
   if (!isAuthenticated.value) {
-    router.push('/login')
-    return
+    return navigateTo('/login')
   }
-  await getUser();
-
   await loadUserData();
 })
 

@@ -11,10 +11,11 @@ export const useAuth = () => {
   }
 
   const getUser = async () => {
-    if (!isAuthenticated.value) return null;
 
     try {
-      const data = await $fetch('/api/auth/user')
+      const data = await $fetch('/api/auth/user', {
+        method: "GET"
+      })
       user.value = data as TwitchUser;
       return user.value;
     } catch (error) {

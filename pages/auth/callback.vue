@@ -2,7 +2,6 @@
 const route = useRoute()
 const router = useRouter()
 const loading = ref(true)
-const { getUser } = useAuth();
 const error = ref<string | null>(null)
 
 onMounted(async () => {
@@ -20,7 +19,6 @@ onMounted(async () => {
       method: 'POST',
       body: { code, state }
     })
-    await getUser();
     if (response.success) {
       router.push('/dashboard')
     }
