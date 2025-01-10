@@ -7,7 +7,7 @@
         <li><NuxtLink to="/commands">Команды</NuxtLink></li>
         <li><NuxtLink to="/logs">Логи</NuxtLink></li>
         <li><NuxtLink to="/">Документация</NuxtLink></li>
-        <li><NuxtLink to="/">Личный кабинет</NuxtLink></li>
+        <li><NuxtLink to="/dashboard">Личный кабинет</NuxtLink></li>
       </ul>
     </nav>
   </header>
