@@ -43,8 +43,9 @@ onMounted(async () => {
     router.push('/login')
     return
   }
+  await getUser();
 
-  await loadUserData()
+  await loadUserData();
 })
 
 const getBroadcasterTypeClass = computed(() => {
