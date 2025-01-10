@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import {Button} from "../components/ui/button"
+import {Button} from "../components/ui/button"
 </script>
 
 <template>
@@ -16,7 +16,7 @@
         <a href="/logs" class="btn btn-primary">Логи</a>
       </Button>
       <Button variant="outline" as-child disabled>
-        <a href="/" class="btn btn-secondary">Личный кабинет</a>
+        <a href="/dashboard" class="btn btn-secondary">Личный кабинет</a>
       </Button>
     </div>
   </div>
