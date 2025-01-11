@@ -118,113 +118,109 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container mx-auto py-8">
-    <h1 class="text-4xl font-bold mb-8 text-center">Логи сообщений</h1>
-
-    <!-- Список каналов -->
-    <div class="flex justify-center mb-8">
-      <Select v-model="selectedChannelId" @update:modelValue="handleChannelSelect">
-        <SelectTrigger class="w-[180px]">
-          <SelectValue placeholder="Выбери канал" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Каналы</SelectLabel>
-            <SelectItem
-              v-for="channel in channels"
-              :key="channel.channelId"
-              :value="String(channel.channelId)"
-            >
-              {{ channel.channelName }}
-            </SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    </div>
-
-    <!-- Фильтры -->
-    <div class="flex justify-center space-x-4 mb-8">
-      <!-- Поиск по тексту -->
-      <Input
-        class="w-[200px]"
-        placeholder="Поиск по тексту..."
-        v-model="searchQuery"
-      />
-
-      <!-- Поиск по пользователю -->
-      <Input
-        class="w-[200px]"
-        placeholder="Имя пользователя..."
-        v-model="selectedUsername"
-      />
-
-      <!-- Фильтр по дате -->
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="outline" class="w-[200px] justify-start text-left">
-            {{ selectedDate ? format(selectedDate, "dd.MM.yyyy") : "Выберите дату" }}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent align="start" class="w-auto p-0">
-          <Calendar v-model="selectedDate" />
-        </PopoverContent>
-      </Popover>
-
-      <!-- Сброс фильтров -->
-       <Button 
-          variant="secondary"
-          @click="resetFilters"
-          :disabled="!searchQuery && !selectedUsername && !selectedDate"
-       >
-        Сбросить фильтры
-       </Button>
-    </div>
-
-    <!-- Состояние загрузки-->
-    <div v-if="isLoading" class="text-center py-4">
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-    </div>
-
-    <!-- Ошибка -->
-    <div v-else-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center">
-      {{ error }}
-    </div>
-
-    <!-- Основной контент -->
-    <template v-else>
-      <!-- Пустое состояние -->
-      <div v-if="!hasResults && selectedChannelId" class="text-center py-4 text-gray-500">
-        Логи не найдены
-      </div>
-
-      <!-- Логи -->
-      <div v-else-if="hasResults" class="bg-card p-4 rounded-lg">
-        <ScrollArea class="h-[450px] w-full rounded-md border">
-          <div v-for="log in logs" :key="log.id" class="p-0.5">
-            <p class="px-4">
-              <span class="text-neutral-600">{{ format(new Date(log.timestamp), "yyy.MM.dd HH:mm") }}</span>
-              <span 
-                class="font-semibold mx-2" 
-                :style="{ color: log.color }"
-                :title="log.badges"
-              >
-                {{ log.username }}:
-              </span>
-              <span>{{ log.message }}</span>
-            </p>
+  <div class="container mx-auto pt-16 pb-2 px-4">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-6">
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            Логи чата
+          </h1>
+          <p class="text-lg text-white/80 max-w-2xl mx-auto">
+            Просмотр и анализ сообщений чата выбранного канала
+          </p>
+        </div>
+      <!-- Controls -->
+      <div class="bg-black/50 backdrop-blur border border-white/10 rounded-lg p-6 mb-3">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="relative flex-1">
+          <Select v-model="selectedChannelId" @update:model-value="handleChannelSelect" class="w-full bg-black/20 border-white/10 text-white rounded-md p-2">
+            <SelectTrigger>
+              <SelectValue placeholder="Выбери канал" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Каналы</SelectLabel>
+                <SelectItem
+                  v-for="channel in channels"
+                  :key="channel.channelId"
+                  :value="String(channel.channelId)"
+                >
+                  {{ channel.channelName }}
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div class="flex-2 flex gap-4">
+          <div class="relative flex-1">
+            <Input
+              class="w-full pl-10 bg-black/20 border border-white/10 text-white placeholder:text-white/50 rounded-md p-2"
+              placeholder="Поиск по тексту..."
+              v-model="searchQuery"
+            />
           </div>
-        </ScrollArea>
-
-        <!-- Пагинация -->
-        <div class="mt-4 flex justify-center">
-          <Pagination
-            :total-pages="totalPages"
-            :current-page="currentPage"
-            :sibling-count="1"
-            @page-changed="handlePageChange"
-          />
+          <div class="relative flex-1">
+            <Input
+              class="w-full pl-10 bg-black/20 border border-white/10 text-white placeholder:text-white/50 rounded-md p-2"
+              placeholder="Имя пользователя..."
+              v-model="selectedUsername"
+            />
+          </div>
+          <div class="flex gap-4">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" class="w-full pl-10 bg-black/20 border border-white/10 text-white/50 rounded-md p-2">
+                  {{ selectedDate ? format(selectedDate, "dd.MM.yyyy") : "Выберите дату" }}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="start" class="w-auto p-0">
+                <Calendar v-model="selectedDate" />
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div class="relative flex-1">
+            <Button 
+                variant="secondary"
+                @click="resetFilters"
+                :disabled="!searchQuery && !selectedUsername && !selectedDate">
+              Сбросить фильтры
+            </Button>
+          </div>
         </div>
       </div>
-    </template>
+    </div>
+
+    <!-- Logs contents-->
+        <div v-if="isLoading" class="text-center">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+        </div>
+        <div v-else-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center">
+          {{ error }}
+        </div>
+        
+        <template v-else>
+          <div v-if="!hasResults && selectedChannelId" class="border rounded text-center px-4 py-3 text-gray-500">
+            Логи не найдены
+          </div>
+
+
+           <div v-else-if="hasResults">
+            <ScrollArea class="h-[450px] bg-black/50 backdrop-blur border border-white/10 rounded-lg p-6 font-mono">
+              <div v-for="log in logs" :key="log.id" class="flex gap-2 p-0.5">
+                  <span class="text-white/50">{{ format(new Date(log.timestamp), "dd.MM.yyyy HH:mm") }}</span>
+                  <span class="font-bold" :style="{ color: log.color }"> {{ log.username}}:</span>
+                  <span class="text-white">{{ log.message }}</span>
+              </div>
+            </ScrollArea>
+           </div>
+           <div class="mt-4 flex justify-center">
+            <Pagination
+              :total-pages="totalPages"
+              :current-page="currentPage"
+              :sibling-count="1"
+              @page-changed="handlePageChange"
+            />
+          </div>
+        </template>
+     </div>
   </div>
 </template>
